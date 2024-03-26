@@ -1,4 +1,4 @@
-team_stats <- function(team_id, type) {
+team_stats <- function(team_id, type = "batting") {
   if (!type %in% c("pitching", "batting")) {
     stop("Invalid type specified. Please use 'pitching' or 'batting'.")
   }
@@ -9,6 +9,7 @@ team_stats <- function(team_id, type) {
   if (type == "batting") {
     park_factor <- park_factor(team_id)
     team_stats_processed <- team_stats %>%
+      filter(!grepl("Totals", player_name, ignore.case = TRUE)) %>%
       select(-player_url) %>%
       mutate(across(everything(), ~replace_na(.x, 0))) %>%
       mutate(across(c(AB, H, `2B`, `3B`, HR, BB, HBP, SF, SH), as.numeric)) %>%
@@ -32,19 +33,20 @@ team_stats <- function(team_id, type) {
     
   } else if (type == "pitching") {
     team_stats_processed <- team_stats %>%
-      filter(!str_detect(player_name, "Totals")) %>%
+      filter(!grepl("Totals", player_name, ignore.case = TRUE)) %>%
+      select(-player_url) %>%
       mutate(across(everything(), ~replace_na(.x, 0))) %>%
       mutate(across(c(IP, SFA, BF, H, `2B-A`, `3B-A`, `HR-A`, BB, HB, SO), as.numeric)) %>%
       filter(BF != 0) %>%
       left_join(guts, by = c("division")) %>%
       mutate(IPx = floor(IP) + (IP - floor(IP)) * (10/3),
-             FIP = round(get_fip(.), 2),
+             FIP = round((13 * `HR-A` + 3 * (BB + HB) - 2 * (SO)) / IPx + cFIP, 2),
              `K/9` = round((SO / IPx) * 9, 2),
              `BB/9` = round((BB / IPx) * 9, 2),
              `HR/9` = round((`HR-A` / IPx) * 9, 2),
              BABIP = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3)) %>%
       select(c("player_name", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
-      arrange(desc(IP))
+      arrange(desc(IP)) %>%
     
     return(team_stats_processed)
   }
