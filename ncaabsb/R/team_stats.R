@@ -21,7 +21,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr filter select mutate across left_join arrange
+#' @importFrom dplyr %>% filter select mutate across left_join arrange
 #' @importFrom baseballr ncaa_team_player_stats
 #' @importFrom tidyr replace_na
 team_stats <- function(team_id, type = "batting") {

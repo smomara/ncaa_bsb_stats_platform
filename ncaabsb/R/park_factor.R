@@ -31,7 +31,7 @@ park_factor <- function(team_id) {
   base_park_factor_value <- base_park_factor(team_id)
 
   adjustment_factor <- abs(base_park_factor_value - 1) * (home_games / total_games)
-  home_game_adj <- base_pf_value + adjustment_factor * ifelse(base_pf_value > 1, -1, 1)
+  home_game_adj <- base_park_factor_value + adjustment_factor * ifelse(base_park_factor_value > 1, -1, 1)
   pf <- 1 - (1 - home_game_adj) * 0.6
 
   pf
