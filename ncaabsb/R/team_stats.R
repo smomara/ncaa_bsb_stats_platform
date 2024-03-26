@@ -26,7 +26,7 @@ team_stats <- function(team_id, type = "batting") {
              `K%` = round(K / PA * 100, 1),
              ISO = round(SlgPct - BA, 3),
              BABIP = round((H - HR) / (AB - HR - K + SF), 3)) %>%
-      select(c("player_name", "GP", "PA", "HR", "R", "RBI", "SB", "BB%", "K%", "ISO", "BABIP", "BA", "OBPct", "SlgPct", "wOBA", "wRC_plus")) %>%
+      select(c("team_name", "division", "Yr", "player_name", "GP", "PA", "HR", "R", "RBI", "SB", "BB%", "K%", "ISO", "BABIP", "BA", "OBPct", "SlgPct", "wOBA", "wRC_plus")) %>%
       arrange(desc(PA))
     
     return(team_stats_processed)
@@ -45,7 +45,7 @@ team_stats <- function(team_id, type = "batting") {
              `BB/9` = round((BB / IPx) * 9, 2),
              `HR/9` = round((`HR-A` / IPx) * 9, 2),
              BABIP = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3)) %>%
-      select(c("player_name", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
+      select(c("team_name", "division", "Yr", "player_name", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
       arrange(desc(IP)) %>%
     
     return(team_stats_processed)
