@@ -1,3 +1,8 @@
 load_guts <- function() {
-    NULL
+  url <- "https://raw.githubusercontent.com/smomara/ncaa_bsb_stats_platform/main/ncaabsb/data/guts.csv"
+  guts <- read.csv(url) %>%
+    rename(lgwOBA = wOBA) %%
+    filter(season == 2023) %>%
+    filter(-season)
+  guts
 }
