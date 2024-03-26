@@ -16,10 +16,10 @@
 #' @export
 #'
 #' @importFrom dplyr filter select pull
-team_name <- function(team_id) {
-  team_name <- load_teams() %>%
-    filter(team_id == team_id) %>%
-    select(school_name) %>%
+team_name <- function(team_name) {
+  team_id <- load_teams() %>%
+    filter(team_name == team_name) %>%
+    select(team_id) %>%
     pull()
-  team_name()
+  team_id()
 }
