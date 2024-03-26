@@ -1,3 +1,29 @@
+#' Retrieve and Process NCAA Baseball Team Statistics
+#'
+#' This function fetches and processes team statistics for an NCAA baseball team for the year 2024, 
+#' based on the team ID and the type of statistics (either 'batting' or 'pitching'). The function 
+#' integrates park factor adjustments for batting statistics and offers detailed metrics such as wOBA, 
+#' wRC+, and others for batting, as well as FIP, K/9, and BABIP for pitching.
+#'
+#' @param team_id Numeric or character. The unique identifier for the team whose statistics are being retrieved.
+#' @param type Character. Specifies the type of statistics to retrieve: 'batting' or 'pitching'. 
+#'             Defaults to 'batting'.
+#'
+#' @return A data frame containing the processed statistics for the team's players. For batting, 
+#'         the statistics include games played, plate appearances, home runs, runs, RBIs, stolen bases, 
+#'         walk and strikeout percentages, ISO, BABIP, batting average, on-base percentage, slugging percentage, 
+#'         wOBA, and wRC+. For pitching, the statistics include games played, games started, innings pitched, 
+#'         strikeouts per 9 innings, walks per 9 innings, home runs per 9 innings, BABIP, ERA, and FIP.
+#'
+#' @examples
+#' batting_stats <- team_stats(124, "batting")
+#' pitching_stats <- team_stats(124, "pitching")
+#'
+#' @export
+#'
+#' @importFrom dplyr filter select mutate across left_join arrange
+#' @importFrom baseballr ncaa_team_player_stats
+#' @importFrom tidyr replace_na
 team_stats <- function(team_id, type = "batting") {
   if (!type %in% c("pitching", "batting")) {
     stop("Invalid type specified. Please use 'pitching' or 'batting'.")

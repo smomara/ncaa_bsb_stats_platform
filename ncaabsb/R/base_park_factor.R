@@ -1,3 +1,17 @@
+#' Calculate the 5-Year Base Park Factor for an NCAA Baseball Team's Home Stadium
+#' 
+#' @param team_id Numeric or character. The unique identifier for the team whose park factor is being calculated.
+#' 
+#' @return A single numeric value representing the 5-year base park factor for
+#' the team's home stadium
+#' 
+#' @examples 
+#' base_park_factor(124)
+#' 
+#'  @export
+#' 
+#' @importFrom dplyr filter mutate case_when
+#' @importFrom baseballr ncaa_schedule_info
 base_park_factor <- function(team_id) {
   home_games <- 0
   away_games <- 0
