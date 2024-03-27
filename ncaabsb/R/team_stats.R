@@ -86,17 +86,17 @@ team_stats <- function(team_id) {
     filter(BF != 0) %>%
     left_join(guts, by = c("division")) %>%
     mutate(IPx = floor(IP) + (IP - floor(IP)) * (10/3),
-           fip = round((13 * `HR-A` + 3 * (BB + HB) - 2 * (SO)) / IPx + cFIP, 2),
-           k_per_9 = round((SO / IPx) * 9, 2),
-           bb_per_9 = round((BB / IPx) * 9, 2),
-           hr_per_9 = round((`HR-A` / IPx) * 9, 2),
-           babip = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3)) %>%
-    select(c("player_id", "GP", "GS", "IP", "k_per_9", "bb_per_9", "hr_per_9", "babip", "ERA", "fip")) %>%
+           fip = ifelse(IPx == 0, Inf, round((13 * `HR-A` + 3 * (BB + HB) - 2 * SO) / IPx + cFIP, 2)),
+           k_per_9 = ifelse(IPx == 0, 0, round(SO / IPx * 9, 2)),
+           bb_per_9 = ifelse(IPx == 0 | BB == 0, 0, round(BB / IPx * 9, 2)),
+           hr_per_9 = ifelse(IPx == 0 | `HR-A` == 0, 0, round(`HR-A` / IPx * 9, 2)),
+           babip = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3),
+           era = ifelse(IPx == 0, Inf, ERA)) %>%
+    select(c("player_id", "GP", "GS", "IP", "k_per_9", "bb_per_9", "hr_per_9", "babip", "era", "fip")) %>%
     rename(
       g = GP,
       gs = GS,
-      ip = IP,
-      era = ERA
+      ip = IP
     )
 
   return(list(player_info, batting_stats, pitching_stats))
