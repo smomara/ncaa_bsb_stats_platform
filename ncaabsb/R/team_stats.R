@@ -92,7 +92,7 @@ team_stats <- function(team_id) {
            `BB/9` = round((BB / IPx) * 9, 2),
            `HR/9` = round((`HR-A` / IPx) * 9, 2),
            BABIP = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3)) %>%
-    select(c("player_id", "Yr", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
+    select(c("player_id", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
     rename(
       `ID` = player_id,
       G = GP
