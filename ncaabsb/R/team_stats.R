@@ -25,7 +25,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter select mutate across left_join arrange rename
+#' @importFrom dplyr %>% filter select mutate across left_join arrange rename distinct
 #' @importFrom baseballr ncaa_team_player_stats
 #' @importFrom tidyr replace_na
 
