@@ -36,17 +36,13 @@ team_stats <- function(team_id) {
 
   player_info <- team_stats %>%
     filter(!grepl("Totals", player_name, ignore.case = TRUE)) %>%
-    select(player_id, player_name, team_name, team_id, conference, conference_id, division, Yr) %>%
+    select(player_id, player_name, team_id, conference_id, division, Yr) %>%
     distinct() %>%
     rename(
-      ID = player_id,
-      Name = player_name,
-      Team = team_name,
-      `Team ID` = team_id,
-      Conference = conference,
-      `Conference ID` = conference_id,
-      Division = division,
-      Grade = Yr
+      id = player_id,
+      name = player_name,
+      division_id = division,
+      grade = Yr
     )
   
   park_factor <- park_factor(team_id)
@@ -58,24 +54,27 @@ team_stats <- function(team_id) {
     mutate(`1B` = H - `2B` - `3B` - HR, PA = AB + BB + HBP + SF + SH) %>%
     filter(PA != 0) %>%
     left_join(guts, by = c("division")) %>%
-    mutate(wOBA = (wBB * BB + wHBP * HBP + w1B * `1B` + w2B * `2B` + w3B * `3B` + wHR * HR) / PA,
-           wRAA = (wOBA - lgwOBA) / wOBAScale * PA,
+    mutate(woba = (wBB * BB + wHBP * HBP + w1B * `1B` + w2B * `2B` + w3B * `3B` + wHR * HR) / PA,
+           wraa = (woba - lgwOBA) / wOBAScale * PA,
            pf = park_factor,
-           wRC_plus = (((wRAA / PA + `R.PA`) + (`R.PA` - pf * `R.PA`)) / `R.PA`) * 100,
-           wOBA = round(wOBA, 3),
-           wRC_plus = round(wRC_plus, 0),
-           `BB%` = round(BB / PA * 100, 1),
-           `K%` = round(K / PA * 100, 1),
-           ISO = round(SlgPct - BA, 3),
-           BABIP = round((H - HR) / (AB - HR - K + SF), 3)) %>%
-    select(c("player_id", "GP", "PA", "HR", "R", "RBI", "SB", "BB%", "K%", "ISO", "BABIP", "BA", "OBPct", "SlgPct", "wOBA", "wRC_plus")) %>%
+           wrc_plus = (((wraa / PA + `R.PA`) + (`R.PA` - pf * `R.PA`)) / `R.PA`) * 100,
+           woba = round(woba, 3),
+           wrc_plus = round(wrc_plus, 0),
+           bb_percentage = round(BB / PA * 100, 1),
+           k_percentage = round(K / PA * 100, 1),
+           iso = round(SlgPct - BA, 3),
+           babip = round((H - HR) / (AB - HR - K + SF), 3)) %>%
+    select(c("player_id", "GP", "PA", "HR", "R", "RBI", "SB", "bb_percentage", "k_percentage", "iso", "babip", "BA", "OBPct", "SlgPct", "woba", "wrc_plus")) %>%
     rename(
-      `ID` = player_id,
-      G = GP,
-      AVG = BA,
-      OBP = OBPct,
-      SLG = SlgPct,
-      `wRC+` = wRC_plus
+      g = GP,
+      pa = PA,
+      hr = HR,
+      r = R,
+      rbi = RBI,
+      sb = SB,
+      avg = BA,
+      obp = OBPct,
+      slg = SlgPct
     )
 
   team_stats <- baseballr::ncaa_team_player_stats(team_id, 2024, "pitching")
@@ -86,19 +85,18 @@ team_stats <- function(team_id) {
     mutate(across(c(IP, SFA, BF, H, `2B-A`, `3B-A`, `HR-A`, BB, HB, SO), as.numeric)) %>%
     filter(BF != 0) %>%
     left_join(guts, by = c("division")) %>%
-    mutate(
-      IPx = floor(IP) + (IP - floor(IP)) * (10/3),
-      FIP = ifelse(IPx == 0, Inf, round((13 * `HR-A` + 3 * (BB + HB) - 2 * SO) / IPx + cFIP, 2)),
-      `K/9` = ifelse(IPx == 0, 0, round(SO / IPx * 9, 2)),
-      `BB/9` = ifelse(IPx == 0 | BB == 0, 0, round(BB / IPx * 9, 2)),
-      `HR/9` = ifelse(IPx == 0 | `HR-A` == 0, 0, round(`HR-A` / IPx * 9, 2)),
-      BABIP = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3),
-      ERA = ifelse(IPx == 0, Inf, ERA)
-    ) %>%
-    select(c("player_id", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
+    mutate(IPx = floor(IP) + (IP - floor(IP)) * (10/3),
+           fip = ifelse(IPx == 0, Inf, round((13 * `HR-A` + 3 * (BB + HB) - 2 * SO) / IPx + cFIP, 2)),
+           k_per_9 = ifelse(IPx == 0, 0, round(SO / IPx * 9, 2)),
+           bb_per_9 = ifelse(IPx == 0 | BB == 0, 0, round(BB / IPx * 9, 2)),
+           hr_per_9 = ifelse(IPx == 0 | `HR-A` == 0, 0, round(`HR-A` / IPx * 9, 2)),
+           babip = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3),
+           era = ifelse(IPx == 0, Inf, ERA)) %>%
+    select(c("player_id", "GP", "GS", "IP", "k_per_9", "bb_per_9", "hr_per_9", "babip", "era", "fip")) %>%
     rename(
-      `ID` = player_id,
-      G = GP
+      g = GP,
+      gs = GS,
+      ip = IP
     )
 
   return(list(player_info, batting_stats, pitching_stats))
