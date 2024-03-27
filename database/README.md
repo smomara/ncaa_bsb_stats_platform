@@ -17,43 +17,42 @@ Here's a preliminary schema diagram:
 ```
 players
 -------
-ID (PRIMARY KEY)
-Name
-Team_ID (FOREIGN KEY referencing teams.id)
-Conference_ID (FOREIGN KEY referencing conferences.id)
-Division_ID (References a division category, not a FOREIGN KEY in this schema)
+id (PRIMARY KEY)
+name
+grade
+team_id (FOREIGN KEY referencing teams.id)
 
 batting_stats
 -------------
-ID (FOREIGN KEY referencing players.ID)
-GP (Games Played)
-PA (Plate Appearances)
-HR (Home Runs)
-R (Runs)
-RBI (Runs Batted In)
-SB (Stolen Bases)
-BB% (Walk Percentage)
-K% (Strikeout Percentage)
-ISO (Isolated Power)
-BABIP (Batting Average on Balls in Play)
-BA (Batting Average)
-OBP (On-Base Percentage)
-SLG (Slugging Percentage)
-wOBA (Weighted On-Base Average)
-wRC+ (Weighted Runs Created Plus)
+player_id (FOREIGN KEY referencing players.id)
+g (Games Played)
+pa (Plate Appearances)
+hr (Home Runs)
+r (Runs)
+rbi (Runs Batted In)
+sb (Stolen Bases)
+bb_percentage (Walk Percentage)
+k_percentage (Strikeout Percentage)
+iso (Isolated Power)
+babip (Batting Average on Balls in Play)
+ba (Batting Average)
+obp (On-Base Percentage)
+slg (Slugging Percentage)
+woba (Weighted On-Base Average)
+wrc_plus (Weighted Runs Created Plus)
 
 pitching_stats
 --------------
-ID (FOREIGN KEY referencing players.ID)
-GP (Games Played)
-GS (Games Started)
-IP (Innings Pitched)
-K/9 (Strikeouts Per 9 Innings)
-BB/9 (Walks Per 9 Innings)
-HR/9 (Home Runs Per 9 Innings)
-BABIP (Batting Average on Balls in Play Against)
-ERA (Earned Run Average)
-FIP (Fielding Independent Pitching)
+player_id (FOREIGN KEY referencing players.id)
+g (Games Played)
+gs (Games Started)
+ip (Innings Pitched)
+k_per_9 (Strikeouts Per 9 Innings)
+bb_per_9 (Walks Per 9 Innings)
+hr_per_9 (Home Runs Per 9 Innings)
+babip (Batting Average on Balls in Play Against)
+era (Earned Run Average)
+fip (Fielding Independent Pitching)
 
 teams
 -----
