@@ -21,7 +21,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter select mutate across left_join arrange
+#' @importFrom dplyr %>% filter select mutate across left_join arrange rename
 #' @importFrom baseballr ncaa_team_player_stats
 #' @importFrom tidyr replace_na
 team_stats <- function(team_id, type = "batting") {
@@ -53,6 +53,17 @@ team_stats <- function(team_id, type = "batting") {
              ISO = round(SlgPct - BA, 3),
              BABIP = round((H - HR) / (AB - HR - K + SF), 3)) %>%
       select(c("team_name", "division", "Yr", "player_name", "GP", "PA", "HR", "R", "RBI", "SB", "BB%", "K%", "ISO", "BABIP", "BA", "OBPct", "SlgPct", "wOBA", "wRC_plus")) %>%
+      rename(
+        Team = team_name,
+        Div = division,
+        Grade = Yr,
+        Name = player_name,
+        G = GP,
+        AVG = BA,
+        OBP = OBPct,
+        SLG = SlgPct,
+        `wRC+` = wRC_plus
+      ) %>%
       arrange(desc(PA))
     
     return(team_stats_processed)
@@ -72,8 +83,14 @@ team_stats <- function(team_id, type = "batting") {
              `HR/9` = round((`HR-A` / IPx) * 9, 2),
              BABIP = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3)) %>%
       select(c("team_name", "division", "Yr", "player_name", "GP", "GS", "IP", "K/9", "BB/9", "HR/9", "BABIP", "ERA", "FIP")) %>%
+      rename(
+        Team = team_name,
+        Div = division,
+        Grade = Yr,
+        Name = player_name,
+        G = GP
+        ) %>%
       arrange(desc(IP)) %>%
-    
     return(team_stats_processed)
   }
 }
