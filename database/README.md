@@ -70,3 +70,35 @@ divisions
 ---------
 id (PRIMARY KEY)
 ```
+
+## Example SQL Queries
+
+### Example 1
+
+Retrieve the batting statistics of all the players in the "Landmark" conference with a wRC+ over 150 and over 50 plate appearances, then order them by wRC+:
+
+```
+SELECT t.name, p.name, bs.*
+FROM batting_stats bs
+JOIN players p ON bs.player_id = p.id
+JOIN teams t ON p.team_id = t.id
+JOIN conferences c ON t.conference_id = c.id
+WHERE c.name = 'Landmark' AND bs.wrc_plus > 150 AND bs.pa > 50
+ORDER BY bs.wrc_plus DESC
+```
+
+### Example 2
+
+Retrieve the pitching stats of the 10 pitchers in Division II that have the lowest FIP and pitched over 10 innings:
+
+```
+SELECT t.name, p.name, ps.*
+FROM pitching_stats ps
+JOIN players p ON ps.player_id = p.id
+JOIN teams t ON p.team_id = t.id
+JOIN conferences c ON t.conference_id = c.id
+JOIN divisions d ON c.division_id = d.id
+WHERE d.id = '2' AND ps.ip > 10
+ORDER BY ps.fip ASC
+LIMIT 10
+```
