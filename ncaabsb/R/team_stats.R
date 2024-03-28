@@ -49,7 +49,7 @@ team_stats <- function(team_id) {
   batting_stats <- team_stats %>%
     filter(!grepl("Totals", player_name, ignore.case = TRUE)) %>%
     select(-player_url) %>%
-    mutate(across(everything(), ~replace_na(.x, 0))) %>%
+    mutate(across(!player_id, ~replace_na(.x, 0))) %>%
     mutate(across(c(AB, H, `2B`, `3B`, HR, BB, HBP, SF, SH), as.numeric)) %>%
     mutate(`1B` = H - `2B` - `3B` - HR, PA = AB + BB + HBP + SF + SH) %>%
     filter(PA != 0) %>%
@@ -81,15 +81,15 @@ team_stats <- function(team_id) {
   pitching_stats <- team_stats %>%
     filter(!grepl("Totals", player_name, ignore.case = TRUE)) %>%
     select(-player_url) %>%
-    mutate(across(everything(), ~replace_na(.x, 0))) %>%
+    mutate(across(!player_id, ~replace_na(.x, 0))) %>%
     mutate(across(c(IP, SFA, BF, H, `2B-A`, `3B-A`, `HR-A`, BB, HB, SO), as.numeric)) %>%
     filter(BF != 0) %>%
     left_join(guts, by = c("division")) %>%
     mutate(IPx = floor(IP) + (IP - floor(IP)) * (10/3),
            fip = ifelse(IPx == 0, Inf, round((13 * `HR-A` + 3 * (BB + HB) - 2 * SO) / IPx + cFIP, 2)),
-           k_per_9 = ifelse(IPx == 0, 0, round(SO / IPx * 9, 2)),
-           bb_per_9 = ifelse(IPx == 0 | BB == 0, 0, round(BB / IPx * 9, 2)),
-           hr_per_9 = ifelse(IPx == 0 | `HR-A` == 0, 0, round(`HR-A` / IPx * 9, 2)),
+           k_per_9 = ifelse(SO == 0, 0, ifelse(IPx == 0, Inf, round(SO / IPx * 9, 2))),
+           bb_per_9 = ifelse(BB == 0, 0, ifelse(IPx == 0, Inf, round(`HR-A` / IPx * 9, 2))),
+           hr_per_9 = ifelse(`HR-A` == 0, 0, ifelse(IPx == 0, Inf, round(`HR-A` / IPx * 9, 2))),
            babip = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3),
            era = ifelse(IPx == 0, Inf, ERA)) %>%
     select(c("player_id", "GP", "GS", "IP", "k_per_9", "bb_per_9", "hr_per_9", "babip", "era", "fip")) %>%
