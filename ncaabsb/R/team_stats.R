@@ -63,7 +63,7 @@ team_stats <- function(team_id) {
            bb_percentage = round(BB / PA * 100, 1),
            k_percentage = round(K / PA * 100, 1),
            iso = round(SlgPct - BA, 3),
-           babip = round((H - HR) / (AB - HR - K + SF), 3)) %>%
+           babip = ifelse(AB - HR - K + SF == 0, 0, round((H - HR) / (AB - HR - K + SF), 3))) %>%
     select(c("player_id", "GP", "PA", "HR", "R", "RBI", "SB", "bb_percentage", "k_percentage", "iso", "babip", "BA", "OBPct", "SlgPct", "woba", "wrc_plus")) %>%
     rename(
       g = GP,
