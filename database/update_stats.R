@@ -37,8 +37,8 @@ dbBegin(con)
 
 dbWriteTable(con, "teams", unique(teams[, c("team_id", "team_name", "conference_id")]) %>%
                rename(id = team_id, name = team_name), overwrite = TRUE)
-dbWriteTable(con, "conferences", unique(teams[, c("conference_id", "conference")]) %>%
-               rename(id = conference_id, name = conference), overwrite = TRUE)
+dbWriteTable(con, "conferences", unique(teams[, c("conference_id", "conference", "division")]) %>%
+               rename(id = conference_id, name = conference, division_id = division), overwrite = TRUE)
 dbWriteTable(con, "divisions", data.frame(division = unique(teams$division), stringsAsFactors = FALSE) %>%
                rename(id = division), overwrite = TRUE)
 
