@@ -71,9 +71,31 @@ divisions
 id (PRIMARY KEY)
 ```
 
-## Example SQL Queries
+## Initialization Guide
 
-### Example 1
+### Setting up the Database
+
+To create the database detailed above, you will need to run the `update_stats.R` script. You can follow these steps:
+
+```bash
+# 1. Clone the Repository
+# Create a copy of the repository on your local machine
+git clone https://github.com/smomara/ncaa_bsb_stats_platform.git
+
+# 2. Navigate to the Database Directory
+# Change directory within the cloned repository
+cd ncaa_bsb_stats_platform/database
+
+# 3. Run the Script
+# Run the script using R
+Rscript update_stats.R
+```
+
+Completing these steps will create a database named `stats.db`, containing comprehensive data on NCAA Baseball teams.
+
+### Example SQL Queries
+
+#### Example 1
 
 Retrieve the batting statistics of all the players in the "Landmark" conference with a wRC+ over 150 and over 50 plate appearances, then order them by wRC+:
 
@@ -87,7 +109,7 @@ WHERE c.name = 'Landmark' AND bs.wrc_plus > 150 AND bs.pa > 50
 ORDER BY bs.wrc_plus DESC
 ```
 
-### Example 2
+#### Example 2
 
 Retrieve the pitching stats of the 10 pitchers in Division II that have the lowest FIP and pitched over 10 innings:
 
