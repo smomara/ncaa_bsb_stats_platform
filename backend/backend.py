@@ -6,8 +6,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker, relationship, Session
 app = FastAPI()
 
 # Cnfigure the database connection
-SQLALCHEMY_DATABSE_URL = "sqlite:///../database/stats.db"
-engine = create_engine(SQLALCHEMY_DATABSE_URL, connect_args={"check_same_thread": False})
+SQLALCHEMY_DATABASE_URL = "sqlite:///../database/stats.db"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -67,6 +67,7 @@ class Team(Base):
 
    id = Column(Integer, primary_key=True, index=True)
    name = Column(String, index=True)
+   g = Column(Integer)
    conference_id = Column(Integer, ForeignKey("conferences.id"))
 
    conference = relationship("Conference", back_populates="teams")
