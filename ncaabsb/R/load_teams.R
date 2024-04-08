@@ -14,7 +14,7 @@
 #' @importFrom dplyr filter
 #' @importFrom baseballr load_ncaa_baseball_teams
 load_teams <- function() {
-  url <- "https://raw.githubusercontent.com/smomara/ncaa_bsb_stats_platform/main/ncaabsb/data/guts.csv"
+  url <- "https://raw.githubusercontent.com/smomara/ncaa_bsb_stats_platform/main/ncaabsb/data/teams.csv"
   teams <- read.csv(url)
   teams
 }
