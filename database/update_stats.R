@@ -30,7 +30,7 @@ library(svMisc)
 
 teams <- ncaabsb::load_teams()
 
-teams <- as.data.frame(teams)
+teams <- as.data.frame(teams) %>% filter(conference == "Landmark")
 
 con <- dbConnect(RSQLite::SQLite(), "stats.db")
 dbBegin(con)
@@ -50,6 +50,10 @@ for(i in 1:nrow(teams)) {
     batting_stats <- as.data.frame(stats[[2]])
     pitching_stats <- as.data.frame(stats[[3]])
     
+    schedule <- baseballr::ncaa_schedule_info(teams$team_id[i], 2024)
+    team_g = sum(!is.na(schedule$contest_id))
+    teams$g[i] = team_g
+    
     if (i == 1) {
       dbWriteTable(con, "players", player_info[, c("id", "name", "grade", "team_id")], overwrite = TRUE)
       dbWriteTable(con, "batting_stats", batting_stats[, c("player_id", "g", "pa", "hr", "r", "rbi", "sb", "bb_percentage", "k_percentage", "iso", "babip", "avg", "obp", "slg", "woba", "wrc_plus")], overwrite = TRUE)
@@ -65,6 +69,13 @@ for(i in 1:nrow(teams)) {
     cat("Error in processing team", i, ": ", e$message, "\n")
   })
   setTxtProgressBar(prog, i)
+}
+
+dbExecute(con, "ALTER TABLE teams ADD COLUMN g INTEGER")
+for(i in 1:nrow(teams)) {
+  team_g <- teams$g[i]
+  team_id <- teams$team_id[i]
+  dbExecute(con, "UPDATE teams SET g = ? WHERE id = ?", list(team_g, team_id))
 }
 
 dbCommit(con)
