@@ -30,7 +30,7 @@ library(svMisc)
 
 teams <- ncaabsb::load_teams()
 
-teams <- as.data.frame(teams) %>% filter(conference == "Landmark")
+teams <- as.data.frame(teams)
 
 con <- dbConnect(RSQLite::SQLite(), "stats.db")
 dbBegin(con)
