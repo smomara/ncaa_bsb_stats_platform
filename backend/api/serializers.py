@@ -2,14 +2,21 @@ from rest_framework import serializers
 import math
 from .models import Division, Conference, Team, Player, BattingStats, PitchingStats
 
-class SafeFloatField(serializers.FloatField):
+class FormattedFloatField(serializers.FloatField):
+    """ Custom FloatField that formats floating point numbers and handles inf and NaN. """
+
+    def __init__(self, format_spec='0.3f', **kwargs):
+        super().__init__(**kwargs)
+        self.format_spec = format_spec
+
     def to_representation(self, value):
         if isinstance(value, float):
             if math.isinf(value):
-                return 999.99
-            if math.isnan(value):
+                return 99.99
+            elif math.isnan(value):
                 return None
-        return super().to_representation(value)
+            return format(value, self.format_spec)
+        return value
 
 class DivisionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,6 +46,21 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 class BattingStatsSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(read_only=True)
+    g = serializers.IntegerField()
+    pa = serializers.IntegerField()
+    hr = serializers.IntegerField()
+    r = serializers.IntegerField()
+    rbi = serializers.IntegerField()
+    sb = serializers.IntegerField()
+    bb_percentage = serializers.FloatField()
+    k_percentage = serializers.FloatField()
+    iso = FormattedFloatField()
+    babip = FormattedFloatField()
+    avg = FormattedFloatField()
+    obp = FormattedFloatField()
+    slg = FormattedFloatField()
+    woba = FormattedFloatField()
+    wrc_plus = serializers.FloatField()
     qualified = serializers.SerializerMethodField()
 
     class Meta:
@@ -50,15 +72,15 @@ class BattingStatsSerializer(serializers.ModelSerializer):
 
 class PitchingStatsSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(read_only=True)
-    g = SafeFloatField(allow_null=True)
-    gs = SafeFloatField(allow_null=True)
-    ip = SafeFloatField(allow_null=True)
-    k_per_9 = SafeFloatField(allow_null=True)
-    bb_per_9 = SafeFloatField(allow_null=True)
-    hr_per_9 = SafeFloatField(allow_null=True)
-    babip = SafeFloatField(allow_null=True)
-    era = SafeFloatField(allow_null=True)
-    fip = SafeFloatField(allow_null=True)
+    g = serializers.IntegerField()
+    gs = serializers.IntegerField()
+    ip = serializers.FloatField()
+    k_per_9 = serializers.FloatField()
+    bb_per_9 = serializers.FloatField()
+    hr_per_9 = serializers.FloatField()
+    babip = FormattedFloatField()
+    era = serializers.FloatField()
+    fip = serializers.FloatField()
     qualified = serializers.SerializerMethodField()
 
     class Meta:
