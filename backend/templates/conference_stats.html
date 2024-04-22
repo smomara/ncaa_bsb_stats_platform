@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{{ conference_name }} Stats - NCAA Baseball Stats{% endblock %}
+
+{% block content %}
+<section>
+    <div>
+        <h1>{{ conference_name }} Stats</h1>
+        <div role="tablist">
+            <div>
+                <div>
+                    <button onclick="showTab('batting')" id="batting-tab" role="tab" aria-selected="true" tabindex="0">
+                        <span>Batting Stats</span>
+                    </button>
+                    <button onclick="showTab('pitching')" id="pitching-tab" role="tab" aria-selected="false" tabindex="-1">
+                        <span>Pitching Stats</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <div id="batting-stats-content">
+                <h2>Batting Stats</h2>
+                {% if batting_stats %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Name</th>
+                            <th>Grade</th>
+                            <th>G</th>
+                            <th>PA</th>
+                            <th>HR</th>
+                            <th>SB</th>
+                            <th>BB%</th>
+                            <th>K%</th>
+                            <th>ISO</th>
+                            <th>BABIP</th>
+                            <th>AVG</th>
+                            <th>OBP</th>
+                            <th>SLG</th>
+                            <th>wOBA</th>
+                            <th>wRC+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in batting_stats %}
+                        {% if stat.qualified %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'team_stats' team_id=stat.player.team.id %}">{{ stat.player.team.name }}</a>
+                            </td>
+                            <td>{{ stat.player.name }}</td>
+                            <td>{{ stat.player.grade }}</td>
+                            <td>{{ stat.g }}</td>
+                            <td>{{ stat.pa }}</td>
+                            <td>{{ stat.hr }}</td>
+                            <td>{{ stat.sb }}</td>
+                            <td>{{ stat.bb_percentage }}</td>
+                            <td>{{ stat.k_percentage }}</td>
+                            <td>{{ stat.iso }}</td>
+                            <td>{{ stat.babip }}</td>
+                            <td>{{ stat.avg }}</td>
+                            <td>{{ stat.obp }}</td>
+                            <td>{{ stat.slg }}</td>
+                            <td>{{ stat.woba }}</td>
+                            <td>{{ stat.wrc_plus }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No batting stats available.</p>
+                {% endif %}
+            </div>
+          
+            <div id="pitching-stats-content" style="display: none;">
+                <h2>Pitching Stats</h2>
+                {% if pitching_stats %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Name</th>
+                            <th>Grade</th>
+                            <th>G</th>
+                            <th>GS</th>
+                            <th>IP</th>
+                            <th>K/9</th>
+                            <th>BB/9</th>
+                            <th>HR/9</th>
+                            <th>BABIP</th>
+                            <th>ERA</th>
+                            <th>FIP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in pitching_stats %}
+                        {% if stat.qualified %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'team_stats' team_id=stat.player.team.id %}">{{ stat.player.team.name }}</a>
+                            </td>
+                            <td>{{ stat.player.name }}</td>
+                            <td>{{ stat.player.grade }}</td>
+                            <td>{{ stat.g }}</td>
+                            <td>{{ stat.gs }}</td>
+                            <td>{{ stat.ip }}</td>
+                            <td>{{ stat.k_per_9 }}</td>
+                            <td>{{ stat.bb_per_9 }}</td>
+                            <td>{{ stat.hr_per_9 }}</td>
+                            <td>{{ stat.babip }}</td>
+                            <td>{{ stat.era }}</td>
+                            <td>{{ stat.fip }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No pitching stats available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showTab(tabName) {
+        // Hide both tabs
+        document.getElementById('batting-stats-content').style.display = 'none';
+        document.getElementById('pitching-stats-content').style.display = 'none';
+        document.getElementById('batting-tab').setAttribute('aria-selected', 'false');
+        document.getElementById('pitching-tab').setAttribute('aria-selected', 'false');
+
+        // Show the selected tab
+        if (tabName === 'batting') {
+            document.getElementById('batting-stats-content').style.display = 'block';
+            document.getElementById('batting-tab').setAttribute('aria-selected', 'true');
+        } else {
+            document.getElementById('pitching-stats-content').style.display = 'block';
+            document.getElementById('pitching-tab').setAttribute('aria-selected', 'true');
+        }
+    }
+</script>
+{% endblock %}

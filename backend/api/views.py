@@ -13,21 +13,19 @@ class PitchingStatsView(generics.ListAPIView):
     queryset = PitchingStats.objects.select_related('player')
     serializer_class = PitchingStatsSerializer
 
-# List batting stats by division
 class BattingStatsByDivision(generics.ListAPIView):
     serializer_class = BattingStatsSerializer
 
     def get_queryset(self):
         division_id = self.kwargs.get('division_id', '')
-        return BattingStats.objects.filter(player__team__division__id=division_id).select_related('player', 'player__team')
+        return BattingStats.objects.filter(player__team__conference__division_id=division_id).select_related('player', 'player__team', 'player__team__conference', 'player__team__conference__division_id')
 
-# List pitching stats by division
 class PitchingStatsByDivision(generics.ListAPIView):
     serializer_class = PitchingStatsSerializer
 
     def get_queryset(self):
         division_id = self.kwargs.get('division_id', '')
-        return PitchingStats.objects.filter(player__team__division__id=division_id).select_related('player', 'player__team')
+        return PitchingStats.objects.filter(player__team__conference__division_id=division_id).select_related('player', 'player__team', 'player__team__conference', 'player__team__conference__division_id')
 
 # List batting stats by conference
 class BattingStatsByConferenceView(generics.ListAPIView):
@@ -65,6 +63,11 @@ class DivisionListView(generics.ListAPIView):
     queryset = Division.objects.all()
     serializer_class = DivisionSerializer
 
+class ConferenceDetailView(generics.RetrieveAPIView):
+    queryset = Conference.objects.all()
+    serializer_class = ConferenceSerializer
+    lookup_field = 'id'
+
 class ConferenceListView(generics.ListAPIView):
     queryset = Conference.objects.all()
     serializer_class = ConferenceSerializer
@@ -79,6 +82,11 @@ class ConferenceByDivisionListView(generics.ListAPIView):
 class TeamListView(generics.ListAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+
+class TeamDetailView(generics.RetrieveAPIView):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    lookup_field = 'id'
 
 class TeamByDivisionListView(generics.ListAPIView):
     serializer_class = TeamSerializer

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}NCAA Baseball Stats{% endblock %}</title>
+</head>
+<body>
+  <header>
+    <div>
+      <section>
+        <span>NCAA Baseball Stats</span>
+      </section>
+      <section>
+        <a href="{% url 'home' %}" aria-label="Home">Home</a>
+        <a href="{% url 'all_teams' %}" aria-label="Teams">Teams</a>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <div>
+      <div>
+        {% block content %}
+        <div>
+          <div>
+            <h2>Welcome to NCAA Baseball Stats</h2>
+            <p>Stay up to date with the latest stats and information.</p>
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>NCAA Baseball Stats</p>
+  </footer>
+</body>
+</html>

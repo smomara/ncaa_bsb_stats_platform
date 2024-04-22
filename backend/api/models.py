@@ -30,7 +30,7 @@ class Player(models.Model):
     id = models.IntegerField(primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=True)
     grade = models.TextField(blank=True, null=True)
-    team = models.OneToOneField(Team, on_delete=models.CASCADE, db_column='team_id')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, db_column='team_id')
     
     class Meta:
         managed = False

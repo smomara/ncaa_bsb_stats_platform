@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Teams - College Baseball Stats{% endblock %}
+
+{% block content %}
+<section>
+  <div>
+    <h1>Teams</h1>
+
+    {% if divisions %}
+    <div role="tablist">
+      {% for division in divisions %}
+      <button onclick="showDivision('{{ division.id }}')" id="tab-{{ division.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">
+        Division {{ division.id }}
+      </button>
+      {% endfor %}
+    </div>
+
+    <div>
+      {% for division in divisions %}
+      <div id="division-{{ division.id }}" style="{% if not forloop.first %}display: none;{% endif %}">
+        <h2>Division {{ division.id }}</h2>
+        <a href="{% url 'division_stats' division_id=division.id %}">View Stats</a>
+
+        <ul>
+          {% for conference in division.conferences %}
+          <li>
+            {{ conference.name }}
+            <a href="{% url 'conference_stats' conference_id=conference.id %}">View Stats</a>
+
+            <ul>
+              {% for team in conference.teams %}
+              <li>
+                {{ team.name }}
+                <a href="{% url 'team_stats' team_id=team.id %}">View Stats</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No conferences available.</p>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  function showDivision(divisionId) {
+    // Loop through all divisions and hide them
+    {% for division in divisions %}
+    document.getElementById('division-{{ division.id }}').style.display = 'none';
+    document.getElementById('tab-{{ division.id }}').setAttribute('aria-selected', 'false');
+    {% endfor %}
+
+    // Show the selected division and set the tab to active
+    document.getElementById('division-' + divisionId).style.display = 'block';
+    document.getElementById('tab-' + divisionId).setAttribute('aria-selected', 'true');
+  }
+</script>
+{% endblock %}
