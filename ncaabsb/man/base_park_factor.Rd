@@ -19,6 +19,6 @@ Calculate the 5-Year Base Park Factor for an NCAA Baseball Team's Home Stadium
 \examples{
 base_park_factor(124)
 
- @export
+ @export base_park_factor
 
 }
