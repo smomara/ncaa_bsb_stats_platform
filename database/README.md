@@ -58,6 +58,7 @@ teams
 -----
 id (PRIMARY KEY)
 name
+g (Games Played)
 conference_id (FOREIGN KEY referencing conferences.id)
 
 conferences

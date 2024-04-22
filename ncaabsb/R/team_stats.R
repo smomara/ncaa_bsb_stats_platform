@@ -86,7 +86,7 @@ team_stats <- function(team_id) {
     mutate(IPx = floor(IP) + (IP - floor(IP)) * (10/3),
            fip = ifelse(IPx == 0, Inf, round((13 * `HR-A` + 3 * (BB + HB) - 2 * SO) / IPx + cFIP, 2)),
            k_per_9 = ifelse(SO == 0, 0, ifelse(IPx == 0, Inf, round(SO / IPx * 9, 2))),
-           bb_per_9 = ifelse(BB == 0, 0, ifelse(IPx == 0, Inf, round(`HR-A` / IPx * 9, 2))),
+           bb_per_9 = ifelse(BB == 0, 0, ifelse(IPx == 0, Inf, round(BB / IPx * 9, 2))),
            hr_per_9 = ifelse(`HR-A` == 0, 0, ifelse(IPx == 0, Inf, round(`HR-A` / IPx * 9, 2))),
            babip = round((H - `HR-A`) / (BF - SO - `HR-A` + SFA), 3),
            era = ifelse(IPx == 0, Inf, ERA)) %>%

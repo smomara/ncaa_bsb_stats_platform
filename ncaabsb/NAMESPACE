@@ -2,6 +2,7 @@
 
 export(load_guts)
 export(load_teams)
+export(base_park_factor)
 export(park_factor)
 export(team_id_to_name)
 export(team_name_to_id)
