@@ -46,19 +46,22 @@ prog <- txtProgressBar(min = 0, max = nrow(teams), style = 3)
 for(i in 1:nrow(teams)) {
   tryCatch({
     stats <- ncaabsb::team_stats(teams$team_id[i])
-    player_info <- as.data.frame(stats[[1]])
-    batting_stats <- as.data.frame(stats[[2]])
-    pitching_stats <- as.data.frame(stats[[3]])
+    player_info <- stats[[1]] %>% as.data.frame() %>% mutate(id = row_number() + (i - 1) * 1000)
+    batting_stats <- stats[[2]] %>% as.data.frame() %>% mutate(player_id = player_info$id) %>% filter(pa != 0)
+    pitching_stats <- stats[[3]] %>% as.data.frame() %>% mutate(player_id = player_info$id) %>% filter(ip != 0)
+    
+    schedule <- baseballr::ncaa_schedule_info(teams$team_id[i], 2024)
+    team_g = sum(!is.na(schedule$contest_id))
+    teams$g[i] = team_g
     
     if (i == 1) {
-      dbWriteTable(con, "players", player_info[, c("id", "name", "grade", "team_id")], overwrite = TRUE)
-      dbWriteTable(con, "batting_stats", batting_stats[, c("player_id", "g", "pa", "hr", "r", "rbi", "sb", "bb_percentage", "k_percentage", "iso", "babip", "avg", "obp", "slg", "woba", "wrc_plus")], overwrite = TRUE)
-      dbWriteTable(con, "pitching_stats", pitching_stats[, c("player_id", "g", "gs", "ip", "k_per_9", "bb_per_9", "hr_per_9", "babip", "era", "fip")], overwrite = TRUE)
+      dbWriteTable(con, "players", player_info, overwrite = TRUE)
+      dbWriteTable(con, "batting_stats", batting_stats, overwrite = TRUE)
+      dbWriteTable(con, "pitching_stats", pitching_stats, overwrite = TRUE)
     } else {
-      dbWriteTable(con, "players", player_info[, c("id", "name", "grade", "team_id")] %>%
-                     rename(team_id = team_id), append = TRUE)
-      dbWriteTable(con, "batting_stats", batting_stats[, c("player_id", "g", "pa", "hr", "r", "rbi", "sb", "bb_percentage", "k_percentage", "iso", "babip", "avg", "obp", "slg", "woba", "wrc_plus")], append = TRUE)
-      dbWriteTable(con, "pitching_stats", pitching_stats[, c("player_id", "g", "gs", "ip", "k_per_9", "bb_per_9", "hr_per_9", "babip", "era", "fip")], append = TRUE)
+      dbWriteTable(con, "players", player_info, append = TRUE)
+      dbWriteTable(con, "batting_stats", batting_stats, append = TRUE)
+      dbWriteTable(con, "pitching_stats", pitching_stats, append = TRUE)
     }
     
   }, error = function(e) {
@@ -66,6 +69,9 @@ for(i in 1:nrow(teams)) {
   })
   setTxtProgressBar(prog, i)
 }
+
+dbExecute(con, "ALTER TABLE teams ADD COLUMN g INTEGER")
+dbExecute(con, "UPDATE teams SET g = ?", list(teams$g), where = "id = ?", list(teams$team_id))
 
 dbCommit(con)
 close(prog)

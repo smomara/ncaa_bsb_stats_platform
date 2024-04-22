@@ -52,7 +52,6 @@ team_stats <- function(team_id) {
     mutate(across(!player_id, ~replace_na(.x, 0))) %>%
     mutate(across(c(AB, H, `2B`, `3B`, HR, BB, HBP, SF, SH), as.numeric)) %>%
     mutate(`1B` = H - `2B` - `3B` - HR, PA = AB + BB + HBP + SF + SH) %>%
-    filter(PA != 0) %>%
     left_join(guts, by = c("division")) %>%
     mutate(woba = (wBB * BB + wHBP * HBP + w1B * `1B` + w2B * `2B` + w3B * `3B` + wHR * HR) / PA,
            wraa = (woba - lgwOBA) / wOBAScale * PA,
@@ -83,7 +82,6 @@ team_stats <- function(team_id) {
     select(-player_url) %>%
     mutate(across(!player_id, ~replace_na(.x, 0))) %>%
     mutate(across(c(IP, SFA, BF, H, `2B-A`, `3B-A`, `HR-A`, BB, HB, SO), as.numeric)) %>%
-    filter(BF != 0) %>%
     left_join(guts, by = c("division")) %>%
     mutate(IPx = floor(IP) + (IP - floor(IP)) * (10/3),
            fip = ifelse(IPx == 0, Inf, round((13 * `HR-A` + 3 * (BB + HB) - 2 * SO) / IPx + cFIP, 2)),
