@@ -3,156 +3,156 @@
 {% block title %} {{ team_name }} Stats - NCAA Baseball Stats{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/style.css">
 <section>
-    <div>
-        <h1>{{ team_name }} Stats</h1>
+    <div class="welcome">
+        <h1 class="welcome-el">{{ team_name }} Stats</h1>
         <div role="tablist">
             <div>
-                <div>
-                    <button onclick="showTab('batting')" id="batting-tab" role="tab" aria-selected="true" tabindex="0">
+                <div class="two-buttons welcome-el">
+                    <button class="button-link button" onclick="showTab('batting')" id="batting-tab" role="tab" aria-selected="true" tabindex="0">
                         <span>Batting Stats</span>
                     </button>
-                    <button onclick="showTab('pitching')" id="pitching-tab" role="tab" aria-selected="false" tabindex="-1">
+                    <button class="button-link button" onclick="showTab('pitching')" id="pitching-tab" role="tab" aria-selected="false" tabindex="-1">
                         <span>Pitching Stats</span>
                     </button>
                 </div>
             </div>
         </div>
+    </div>  
+    <div>
+        <div id="batting-stats-content">
+            <h2>Batting Stats</h2>
+            {% if batting_stats %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Grade</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 2)">G</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 3)">PA</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 4)">HR</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 5)">SB</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 6)">BB%</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 7)">K%</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 8)">ISO</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 9)">BABIP</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 10)">AVG</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 11)">OBP</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 12)">SLG</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 13)">wOBA</th>
+                        <th onclick="sortTable(event, 'batting-stats-content', 14)">wRC+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in batting_stats %}
+                    {% if stat.qualified %}
+                    <tr>
+                        <td>{{ stat.player.name }}</td>
+                        <td>{{ stat.player.grade }}</td>
+                        <td>{{ stat.g }}</td>
+                        <td>{{ stat.pa }}</td>
+                        <td>{{ stat.hr }}</td>
+                        <td>{{ stat.sb }}</td>
+                        <td>{{ stat.bb_percentage }}</td>
+                        <td>{{ stat.k_percentage }}</td>
+                        <td>{{ stat.iso }}</td>
+                        <td>{{ stat.babip }}</td>
+                        <td>{{ stat.avg }}</td>
+                        <td>{{ stat.obp }}</td>
+                        <td>{{ stat.slg }}</td>
+                        <td>{{ stat.woba }}</td>
+                        <td>{{ stat.wrc_plus }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% for stat in batting_stats %}
+                    {% if not stat.qualified and stat.pa > 0 %}
+                    <tr>
+                        <td>{{ stat.player.name }}</td>
+                        <td>{{ stat.player.grade }}</td>
+                        <td>{{ stat.g }}</td>
+                        <td>{{ stat.pa }}</td>
+                        <td>{{ stat.hr }}</td>
+                        <td>{{ stat.sb }}</td>
+                        <td>{{ stat.bb_percentage }}</td>
+                        <td>{{ stat.k_percentage }}</td>
+                        <td>{{ stat.iso }}</td>
+                        <td>{{ stat.babip }}</td>
+                        <td>{{ stat.avg }}</td>
+                        <td>{{ stat.obp }}</td>
+                        <td>{{ stat.slg }}</td>
+                        <td>{{ stat.woba }}</td>
+                        <td>{{ stat.wrc_plus }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No batting stats available.</p>
+            {% endif %}
+        </div>
         
-        <div>
-            <div id="batting-stats-content">
-                <h2>Batting Stats</h2>
-                {% if batting_stats %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Grade</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 2)">G</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 3)">PA</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 4)">HR</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 5)">SB</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 6)">BB%</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 7)">K%</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 8)">ISO</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 9)">BABIP</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 10)">AVG</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 11)">OBP</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 12)">SLG</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 13)">wOBA</th>
-                            <th onclick="sortTable(event, 'batting-stats-content', 14)">wRC+</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stat in batting_stats %}
-                        {% if stat.qualified %}
-                        <tr>
-                            <td>{{ stat.player.name }}</td>
-                            <td>{{ stat.player.grade }}</td>
-                            <td>{{ stat.g }}</td>
-                            <td>{{ stat.pa }}</td>
-                            <td>{{ stat.hr }}</td>
-                            <td>{{ stat.sb }}</td>
-                            <td>{{ stat.bb_percentage }}</td>
-                            <td>{{ stat.k_percentage }}</td>
-                            <td>{{ stat.iso }}</td>
-                            <td>{{ stat.babip }}</td>
-                            <td>{{ stat.avg }}</td>
-                            <td>{{ stat.obp }}</td>
-                            <td>{{ stat.slg }}</td>
-                            <td>{{ stat.woba }}</td>
-                            <td>{{ stat.wrc_plus }}</td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                        {% for stat in batting_stats %}
-                        {% if not stat.qualified and stat.pa > 0 %}
-                        <tr>
-                            <td>{{ stat.player.name }}</td>
-                            <td>{{ stat.player.grade }}</td>
-                            <td>{{ stat.g }}</td>
-                            <td>{{ stat.pa }}</td>
-                            <td>{{ stat.hr }}</td>
-                            <td>{{ stat.sb }}</td>
-                            <td>{{ stat.bb_percentage }}</td>
-                            <td>{{ stat.k_percentage }}</td>
-                            <td>{{ stat.iso }}</td>
-                            <td>{{ stat.babip }}</td>
-                            <td>{{ stat.avg }}</td>
-                            <td>{{ stat.obp }}</td>
-                            <td>{{ stat.slg }}</td>
-                            <td>{{ stat.woba }}</td>
-                            <td>{{ stat.wrc_plus }}</td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <p>No batting stats available.</p>
-                {% endif %}
-            </div>
-          
-            <div id="pitching-stats-content" style="display: none;">
-                <h2>Pitching Stats</h2>
-                {% if pitching_stats %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Grade</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 2)">G</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 3)">GS</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 4)">IP</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 5)">K/9</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 6)">BB/9</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 7)">HR/9</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 8)">BABIP</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 9)">ERA</th>
-                            <th onclick="sortTable(event, 'pitching-stats-content', 10)">FIP</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stat in pitching_stats %}
-                        {% if stat.qualified %}
-                        <tr>
-                            <td>{{ stat.player.name }}</td>
-                            <td>{{ stat.player.grade }}</td>
-                            <td>{{ stat.g }}</td>
-                            <td>{{ stat.gs }}</td>
-                            <td>{{ stat.ip }}</td>
-                            <td>{{ stat.k_per_9 }}</td>
-                            <td>{{ stat.bb_per_9 }}</td>
-                            <td>{{ stat.hr_per_9 }}</td>
-                            <td>{{ stat.babip }}</td>
-                            <td>{{ stat.era }}</td>
-                            <td>{{ stat.fip }}</td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                        {% for stat in pitching_stats %}
-                        {% if not stat.qualified and stat.ip > 0%}
-                        <tr>
-                            <td>{{ stat.player.name }}</td>
-                            <td>{{ stat.player.grade }}</td>
-                            <td>{{ stat.g }}</td>
-                            <td>{{ stat.gs }}</td>
-                            <td>{{ stat.ip }}</td>
-                            <td>{{ stat.k_per_9 }}</td>
-                            <td>{{ stat.bb_per_9 }}</td>
-                            <td>{{ stat.hr_per_9 }}</td>
-                            <td>{{ stat.babip }}</td>
-                            <td>{{ stat.era }}</td>
-                            <td>{{ stat.fip }}</td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <p>No pitching stats available.</p>
-                {% endif %}
-            </div>
+        <div id="pitching-stats-content" style="display: none;">
+            <h2>Pitching Stats</h2>
+            {% if pitching_stats %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Grade</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 2)">G</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 3)">GS</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 4)">IP</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 5)">K/9</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 6)">BB/9</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 7)">HR/9</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 8)">BABIP</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 9)">ERA</th>
+                        <th onclick="sortTable(event, 'pitching-stats-content', 10)">FIP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in pitching_stats %}
+                    {% if stat.qualified %}
+                    <tr>
+                        <td>{{ stat.player.name }}</td>
+                        <td>{{ stat.player.grade }}</td>
+                        <td>{{ stat.g }}</td>
+                        <td>{{ stat.gs }}</td>
+                        <td>{{ stat.ip }}</td>
+                        <td>{{ stat.k_per_9 }}</td>
+                        <td>{{ stat.bb_per_9 }}</td>
+                        <td>{{ stat.hr_per_9 }}</td>
+                        <td>{{ stat.babip }}</td>
+                        <td>{{ stat.era }}</td>
+                        <td>{{ stat.fip }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% for stat in pitching_stats %}
+                    {% if not stat.qualified and stat.ip > 0%}
+                    <tr>
+                        <td>{{ stat.player.name }}</td>
+                        <td>{{ stat.player.grade }}</td>
+                        <td>{{ stat.g }}</td>
+                        <td>{{ stat.gs }}</td>
+                        <td>{{ stat.ip }}</td>
+                        <td>{{ stat.k_per_9 }}</td>
+                        <td>{{ stat.bb_per_9 }}</td>
+                        <td>{{ stat.hr_per_9 }}</td>
+                        <td>{{ stat.babip }}</td>
+                        <td>{{ stat.era }}</td>
+                        <td>{{ stat.fip }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No pitching stats available.</p>
+            {% endif %}
         </div>
     </div>
 </section>

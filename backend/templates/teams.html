@@ -3,17 +3,20 @@
 {% block title %}Teams - College Baseball Stats{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/style.css">
 <section>
   <div>
-    <h1>Teams</h1>
+    <div class="welcome">
+      <h1 class="welcome-el">Teams</h1>
 
-    {% if divisions %}
-    <div role="tablist">
-      {% for division in divisions %}
-      <button onclick="showDivision('{{ division.id }}')" id="tab-{{ division.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">
-        Division {{ division.id }}
-      </button>
-      {% endfor %}
+      {% if divisions %}
+      <div class="three-buttons welcome-el" role="tablist">
+        {% for division in divisions %}
+        <button class="button-link button" onclick="showDivision('{{ division.id }}')" id="tab-{{ division.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">
+          Division {{ division.id }}
+        </button>
+        {% endfor %}
+      </div>
     </div>
 
     <div>

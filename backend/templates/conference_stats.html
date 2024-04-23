@@ -3,16 +3,17 @@
 {% block title %}{{ conference_name }} Stats - NCAA Baseball Stats{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/style.css">
 <section>
-    <div>
-        <h1>{{ conference_name }} Stats</h1>
+    <div class="welcome">
+        <h1 class="welcome-el">{{ conference_name }} Stats</h1>
         <div role="tablist">
             <div>
-                <div>
-                    <button onclick="showTab('batting')" id="batting-tab" role="tab" aria-selected="true" tabindex="0">
+                <div class="two-buttons welcome-el">
+                    <button class="button-link button" onclick="showTab('batting')" id="batting-tab" role="tab" aria-selected="true" tabindex="0">
                         <span>Batting Stats</span>
                     </button>
-                    <button onclick="showTab('pitching')" id="pitching-tab" role="tab" aria-selected="false" tabindex="-1">
+                    <button class="button-link button" onclick="showTab('pitching')" id="pitching-tab" role="tab" aria-selected="false" tabindex="-1">
                         <span>Pitching Stats</span>
                     </button>
                 </div>
