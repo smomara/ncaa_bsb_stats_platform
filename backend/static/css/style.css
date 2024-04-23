@@ -1,0 +1,43 @@
+body { 
+    color: white;
+    background-color: rgb(25, 25, 25);
+    margin: 0px;
+    font-family: helvetica;
+}
+
+#heading {
+    padding: 35px;
+    text-align: center;
+    font-size: large;
+    border-color: rgb(100, 100, 100);
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+}
+nav {
+    padding: 17px 0px;
+    border-color: rgb(100, 100, 100);
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+}
+
+.navelement {
+    padding: 8px;
+    margin: 0px 5px;
+    border-color: rgb(100, 100, 100);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    color: white;
+    text-decoration: none;
+}
+
+footer {
+    padding: 10px;
+    border-color: rgb(100, 100, 100);
+    border-width: 1px 0px 0px 0px;
+    border-style: solid;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
