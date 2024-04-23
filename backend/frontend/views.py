@@ -35,10 +35,10 @@ def division_stats(request, division_id):
     pitching_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/pitching-stats/division/{division_id}/').json()
 
      # Sort batting stats by 'wrc_plus', descending (higher is better)
-    batting_stats_sorted = sorted(batting_stats, key=lambda x: x.get('wrc_plus', 0), reverse=True)
+    batting_stats_sorted = sorted(batting_stats, key=lambda x: float(x.get('wrc_plus')) if x.get('wrc_plus') is not None else 0, reverse=True)
 
     # Sort pitching stats by 'fip', ascending (lower is better)
-    pitching_stats_sorted = sorted(pitching_stats, key=lambda x: x.get('fip', float('inf')))
+    pitching_stats_sorted = sorted(pitching_stats, key=lambda x: float(x.get('fip')) if x.get('fip') is not None else float(99.99))
 
     return render(request, 'division_stats.html', {
         'division': division_id,
@@ -52,10 +52,10 @@ def conference_stats(request, conference_id):
     pitching_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/pitching-stats/conference/{conference_id}/').json()
 
     # Sort batting stats by 'wrc_plus', descending (higher is better)
-    batting_stats_sorted = sorted(batting_stats, key=lambda x: x.get('wrc_plus', 0), reverse=True)
+    batting_stats_sorted = sorted(batting_stats, key=lambda x: float(x.get('wrc_plus')) if x.get('wrc_plus') is not None else 0, reverse=True)
 
     # Sort pitching stats by 'fip', ascending (lower is better)
-    pitching_stats_sorted = sorted(pitching_stats, key=lambda x: x.get('fip', float('inf')))
+    pitching_stats_sorted = sorted(pitching_stats, key=lambda x: float(x.get('fip')) if x.get('fip') is not None else float(99.99))
 
     return render(request, 'conference_stats.html', {
         'conference_name': conference.get("name"),
@@ -69,10 +69,10 @@ def team_stats(request, team_id):
     pitching_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/pitching-stats/team/{team_id}/').json()
 
      # Sort batting stats by 'wrc_plus', descending (higher is better)
-    batting_stats_sorted = sorted(batting_stats, key=lambda x: x.get('wrc_plus', 0), reverse=True)
+    batting_stats_sorted = sorted(batting_stats, key=lambda x: float(x.get('wrc_plus')) if x.get('wrc_plus') is not None else 0, reverse=True)
 
     # Sort pitching stats by 'fip', ascending (lower is better)
-    pitching_stats_sorted = sorted(pitching_stats, key=lambda x: x.get('fip', float('inf')))
+    pitching_stats_sorted = sorted(pitching_stats, key=lambda x: float(x.get('fip')) if x.get('fip') is not None else float(99.99))
 
     return render(request, 'team_stats.html', {
         'team_name': team.get("name"),

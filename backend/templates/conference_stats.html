@@ -29,19 +29,19 @@
                             <th>Team</th>
                             <th>Name</th>
                             <th>Grade</th>
-                            <th>G</th>
-                            <th>PA</th>
-                            <th>HR</th>
-                            <th>SB</th>
-                            <th>BB%</th>
-                            <th>K%</th>
-                            <th>ISO</th>
-                            <th>BABIP</th>
-                            <th>AVG</th>
-                            <th>OBP</th>
-                            <th>SLG</th>
-                            <th>wOBA</th>
-                            <th>wRC+</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 3)">G</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 4)">PA</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 5)">HR</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 6)">SB</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 7)">BB%</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 8)">K%</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 9)">ISO</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 10)">BABIP</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 11)">AVG</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 12)">OBP</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 13)">SLG</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 14)">wOBA</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 15)">wRC+</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,15 +85,15 @@
                             <th>Team</th>
                             <th>Name</th>
                             <th>Grade</th>
-                            <th>G</th>
-                            <th>GS</th>
-                            <th>IP</th>
-                            <th>K/9</th>
-                            <th>BB/9</th>
-                            <th>HR/9</th>
-                            <th>BABIP</th>
-                            <th>ERA</th>
-                            <th>FIP</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 3)">G</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 4)">GS</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 5)">IP</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 6)">K/9</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 7)">BB/9</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 8)">HR/9</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 9)">BABIP</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 10)">ERA</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 11)">FIP</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -143,6 +143,60 @@
             document.getElementById('pitching-stats-content').style.display = 'block';
             document.getElementById('pitching-tab').setAttribute('aria-selected', 'true');
         }
+    }
+
+    function sortTable(event, tableId, col) {
+        var table = event.target.closest('table');
+        var rows = Array.from(table.getElementsByTagName('tr'));
+        var header = rows.shift();
+        var dir = table.getAttribute('data-dir') || 'desc';
+
+        quickSort(rows, 0, rows.length - 1, col, dir);
+
+        dir = dir == 'desc' ? "asc" : "desc";
+        table.setAttribute('data-dir', dir)
+
+        table.innerHTML = '';
+        table.appendChild(header);
+        rows.forEach(function(row) {
+            table.appendChild(row);
+        });
+    }
+
+    function quickSort(arr, left, right, col, dir) {
+        if (left < right) {
+            var pivotIndex = partition(arr, left, right, col, dir);
+            quickSort(arr, left, pivotIndex - 1, col, dir);
+            quickSort(arr, pivotIndex + 1, right, col, dir);
+        }
+    }
+
+    function partition(arr, left, right, col, dir) {
+        var pivot = arr[right];
+        var i = left - 1;
+
+        for (var j = left; j < right; j++) {
+            var xValue = getValueFromCell(arr[j].getElementsByTagName("TD")[col]);
+            var yValue = getValueFromCell(pivot.getElementsByTagName("TD")[col]);
+
+            if ((dir === "asc" && xValue <= yValue) || (dir === "desc" && xValue >= yValue)) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        swap(arr, i + 1, right);
+        return i + 1;
+    }
+
+    function swap(arr, i, j) {
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    function getValueFromCell(cell) {
+        return isNaN(parseFloat(cell.textContent)) ? cell.textContent.toLowerCase() : parseFloat(cell.textContent);
     }
 </script>
 {% endblock %}

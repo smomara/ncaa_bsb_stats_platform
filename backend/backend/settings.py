@@ -25,7 +25,7 @@ SECRET_KEY = "4)8-8u41vx2uk^1-7rdu9-fgwg1!6c2-r1j8+@9l83f7ba6)eq"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["ncaa-bsb-stats-40f08cc936de.herokuapp.com"]
+ALLOWED_HOSTS = ["ncaa-bsb-stats-40f08cc936de.herokuapp.com", "localhost"]
 
 
 # Application definition

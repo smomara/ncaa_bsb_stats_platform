@@ -28,19 +28,19 @@
                         <tr>
                             <th>Name</th>
                             <th>Grade</th>
-                            <th>G</th>
-                            <th>PA</th>
-                            <th>HR</th>
-                            <th>SB</th>
-                            <th>BB%</th>
-                            <th>K%</th>
-                            <th>ISO</th>
-                            <th>BABIP</th>
-                            <th>AVG</th>
-                            <th>OBP</th>
-                            <th>SLG</th>
-                            <th>wOBA</th>
-                            <th>wRC+</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 2)">G</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 3)">PA</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 4)">HR</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 5)">SB</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 6)">BB%</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 7)">K%</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 8)">ISO</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 9)">BABIP</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 10)">AVG</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 11)">OBP</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 12)">SLG</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 13)">wOBA</th>
+                            <th onclick="sortTable(event, 'batting-stats-content', 14)">wRC+</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,7 +66,7 @@
                         {% endif %}
                         {% endfor %}
                         {% for stat in batting_stats %}
-                        {% if not stat.qualified %}
+                        {% if not stat.qualified and stat.pa > 0 %}
                         <tr>
                             <td>{{ stat.player.name }}</td>
                             <td>{{ stat.player.grade }}</td>
@@ -101,15 +101,15 @@
                         <tr>
                             <th>Name</th>
                             <th>Grade</th>
-                            <th>G</th>
-                            <th>GS</th>
-                            <th>IP</th>
-                            <th>K/9</th>
-                            <th>BB/9</th>
-                            <th>HR/9</th>
-                            <th>BABIP</th>
-                            <th>ERA</th>
-                            <th>FIP</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 2)">G</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 3)">GS</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 4)">IP</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 5)">K/9</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 6)">BB/9</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 7)">HR/9</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 8)">BABIP</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 9)">ERA</th>
+                            <th onclick="sortTable(event, 'pitching-stats-content', 10)">FIP</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,7 +131,7 @@
                         {% endif %}
                         {% endfor %}
                         {% for stat in pitching_stats %}
-                        {% if not stat.qualified %}
+                        {% if not stat.qualified and stat.ip > 0%}
                         <tr>
                             <td>{{ stat.player.name }}</td>
                             <td>{{ stat.player.grade }}</td>
@@ -173,6 +173,60 @@
             document.getElementById('pitching-stats-content').style.display = 'block';
             document.getElementById('pitching-tab').setAttribute('aria-selected', 'true');
         }
+    }
+
+    function sortTable(event, tableId, col) {
+        var table = event.target.closest('table');
+        var rows = Array.from(table.getElementsByTagName('tr'));
+        var header = rows.shift();
+        var dir = table.getAttribute('data-dir') || 'desc';
+
+        quickSort(rows, 0, rows.length - 1, col, dir);
+
+        dir = dir == 'desc' ? "asc" : "desc";
+        table.setAttribute('data-dir', dir)
+
+        table.innerHTML = '';
+        table.appendChild(header);
+        rows.forEach(function(row) {
+            table.appendChild(row);
+        });
+    }
+
+    function quickSort(arr, left, right, col, dir) {
+        if (left < right) {
+            var pivotIndex = partition(arr, left, right, col, dir);
+            quickSort(arr, left, pivotIndex - 1, col, dir);
+            quickSort(arr, pivotIndex + 1, right, col, dir);
+        }
+    }
+
+    function partition(arr, left, right, col, dir) {
+        var pivot = arr[right];
+        var i = left - 1;
+
+        for (var j = left; j < right; j++) {
+            var xValue = getValueFromCell(arr[j].getElementsByTagName("TD")[col]);
+            var yValue = getValueFromCell(pivot.getElementsByTagName("TD")[col]);
+
+            if ((dir === "asc" && xValue <= yValue) || (dir === "desc" && xValue >= yValue)) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        swap(arr, i + 1, right);
+        return i + 1;
+    }
+
+    function swap(arr, i, j) {
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    function getValueFromCell(cell) {
+        return isNaN(parseFloat(cell.textContent)) ? cell.textContent.toLowerCase() : parseFloat(cell.textContent);
     }
 </script>
 {% endblock %}
