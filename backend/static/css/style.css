@@ -5,6 +5,17 @@ body {
     font-family: helvetica;
 }
 
+header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+main {
+    margin: 150px 0px 0px 0px;
+}
+
 #heading {
     padding: 35px;
     text-align: center;
@@ -40,4 +51,40 @@ footer {
     bottom: 0px;
     left: 0px;
     right: 0px;
+}
+
+#welcome {
+    margin: 50px 0px;
+}
+
+.welcome {
+    text-align: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas: 'stats analysis profiles';
+    gap: 10px;
+    margin: 50px;
+}
+
+.grid-element {
+    padding: 8px;
+    border-color: rgb(100, 100, 100);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    text-align: center;
+}
+
+#stats {
+    grid-area: stats;
+}
+
+#analysis {
+    grid-area: analysis;
+}
+
+#profiles {
+    grid-area: profiles;
 }

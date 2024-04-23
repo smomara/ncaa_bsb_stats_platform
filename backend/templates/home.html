@@ -5,35 +5,27 @@
 {% block content %}
 <link rel="stylesheet" href="../static/css/style.css">
 <section>
-  <div>
-    <h2>Welcome to the College Baseball Stats Portal</h2>
-    <p>Your premier source for stats, data, and insights into college baseball.</p>
-    <a href="{% url 'all_teams' %}">Explore Teams</a>
+  <div id="welcome">
+    <h2 class="welcome">Welcome to the College Baseball Stats Portal</h2>
+    <p class="welcome">Your premier source for stats, data, and insights into college baseball.</p>
+    <div>
+      <a class="welcome" href="{% url 'all_teams' %}">Explore Teams</a>
+    </div>
   </div>
 </section>
 
-<section>
-  <div>
-    <div>
-      <div>
-        <div>
-          <h3>Comprehensive Stats</h3>
-          <p>Access detailed statistics for teams, players, and games.</p>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h3>In-Depth Analysis</h3>
-          <p>Gain insights and trends through advanced analytics.</p>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h3>Player Profiles</h3>
-          <p>Explore detailed information about your favorite players.</p>
-        </div>
-      </div>
-    </div>
+<section class="grid-container">
+  <div id="stats" class="grid-element">
+    <h3>Comprehensive Stats</h3>
+    <p>Access detailed statistics for teams, players, and games.</p>
+  </div>
+  <div id="analysis" class="grid-element">
+    <h3>In-Depth Analysis</h3>
+    <p>Gain insights and trends through advanced analytics.</p>
+  </div>
+  <div id="profiles" class="grid-element">
+    <h3>Player Profiles</h3>
+    <p>Explore detailed information about your favorite players.</p>
   </div>
 </section>
 {% endblock %}
