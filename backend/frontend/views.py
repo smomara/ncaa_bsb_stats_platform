@@ -5,10 +5,10 @@ def home(request):
     return render(request, 'home.html')
 
 def all_teams(request):
-    response = requests.get('http://localhost:8000/api/conferences/')
+    response = requests.get('http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/conferences/')
     conferences = response.json()
 
-    teams = requests.get('http://localhost:8000/api/teams/').json()
+    teams = requests.get('http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/teams/').json()
     conference_teams_map = {conference['id']: [] for conference in conferences}
     for team in teams:
         conference_id = team['conference']['id']
@@ -31,8 +31,8 @@ def all_teams(request):
     return render(request, 'teams.html', {'divisions': division_list})
 
 def division_stats(request, division_id):
-    batting_stats = requests.get(f'http://localhost:8000/api/batting-stats/division/{division_id}/').json()
-    pitching_stats = requests.get(f'http://localhost:8000/api/pitching-stats/division/{division_id}/').json()
+    batting_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/batting-stats/division/{division_id}/').json()
+    pitching_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/pitching-stats/division/{division_id}/').json()
 
      # Sort batting stats by 'wrc_plus', descending (higher is better)
     batting_stats_sorted = sorted(batting_stats, key=lambda x: x.get('wrc_plus', 0), reverse=True)
@@ -47,9 +47,9 @@ def division_stats(request, division_id):
     })
 
 def conference_stats(request, conference_id):
-    conference = requests.get(f'http://localhost:8000/api/conferences/{conference_id}/').json()
-    batting_stats = requests.get(f'http://localhost:8000/api/batting-stats/conference/{conference_id}/').json()
-    pitching_stats = requests.get(f'http://localhost:8000/api/pitching-stats/conference/{conference_id}/').json()
+    conference = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/conferences/{conference_id}/').json()
+    batting_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/batting-stats/conference/{conference_id}/').json()
+    pitching_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/pitching-stats/conference/{conference_id}/').json()
 
     # Sort batting stats by 'wrc_plus', descending (higher is better)
     batting_stats_sorted = sorted(batting_stats, key=lambda x: x.get('wrc_plus', 0), reverse=True)
@@ -64,9 +64,9 @@ def conference_stats(request, conference_id):
     })
 
 def team_stats(request, team_id):
-    team = requests.get(f'http://localhost:8000/api/teams/{team_id}/').json()
-    batting_stats = requests.get(f'http://localhost:8000/api/batting-stats/team/{team_id}/').json()
-    pitching_stats = requests.get(f'http://localhost:8000/api/pitching-stats/team/{team_id}/').json()
+    team = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/teams/{team_id}/').json()
+    batting_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/batting-stats/team/{team_id}/').json()
+    pitching_stats = requests.get(f'http://ncaa-bsb-stats-40f08cc936de.herokuapp.com/api/pitching-stats/team/{team_id}/').json()
 
      # Sort batting stats by 'wrc_plus', descending (higher is better)
     batting_stats_sorted = sorted(batting_stats, key=lambda x: x.get('wrc_plus', 0), reverse=True)
