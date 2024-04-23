@@ -3,13 +3,12 @@
 {% block title %}Home - College Baseball Stats{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/style.css">
 <section>
   <div id="welcome">
     <h2 class="welcome">Welcome to the College Baseball Stats Portal</h2>
     <p class="welcome">Your premier source for stats, data, and insights into college baseball.</p>
-    <div>
-      <a class="welcome" href="{% url 'all_teams' %}">Explore Teams</a>
-    </div>
+    <a id="explore-teams" class="welcome" style="display: block" href="{% url 'all_teams' %}">Explore Teams</a>
   </div>
 </section>
 
