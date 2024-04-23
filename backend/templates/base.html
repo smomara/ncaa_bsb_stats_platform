@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}NCAA Baseball Stats{% endblock %}</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
   <header>
     <div>
-      <section>
+      <section id="heading">
         <span>NCAA Baseball Stats</span>
       </section>
-      <section>
-        <a href="{% url 'home' %}" aria-label="Home">Home</a>
-        <a href="{% url 'all_teams' %}" aria-label="Teams">Teams</a>
-      </section>
+      <nav>
+        <a class="navelement" href="{% url 'home' %}" aria-label="Home">Home</a>
+        <a class="navelement" href="{% url 'all_teams' %}" aria-label="Teams">Teams</a>
+      </nav>
     </div>
   </header>
 
