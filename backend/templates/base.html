@@ -1,42 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="/">
-  <title>{% block title %}NCAA Baseball Stats{% endblock %}</title>
-  <link rel="stylesheet" href="../static/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NCAA Baseball Stats{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-  <header>
-    <div>
-      <section id="heading">
-        <span>NCAA Baseball Stats</span>
-      </section>
-      <nav>
-        <a class="navelement button-link" href="{% url 'home' %}" aria-label="Home">Home</a>
-        <a class="navelement button-link" href="{% url 'all_teams' %}" aria-label="Teams">Teams</a>
-      </nav>
-    </div>
-  </header>
+    <header>
+        <div class="container">
+            <h1 id="site-title">NCAA Baseball Stats</h1>
+            <nav>
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+                <a class="nav-link" href="{% url 'all_teams' %}">Teams</a>
+            </nav>
+        </div>
+    </header>
 
-  <main>
-    <div>
-      <div>
-        {% block content %}
-        <div>
-          <div>
+    <main>
+        <div class="container">
+            {% block content %}
             <h2>Welcome to NCAA Baseball Stats</h2>
             <p>Stay up to date with the latest stats and information.</p>
-          </div>
+            {% endblock %}
         </div>
-        {% endblock %}
-      </div>
-    </div>
-  </main>
+    </main>
 
-  <footer>
-    <p>NCAA Baseball Stats</p>
-  </footer>
+    <footer>
+        <div class="container">
+            <p>NCAA Baseball Stats</p>
+        </div>
+    </footer>
 </body>
 </html>

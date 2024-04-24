@@ -3,7 +3,6 @@
 {% block title %}{{ conference_name }} Stats - NCAA Baseball Stats{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/style.css">
 <section>
     <div class="welcome">
         <h1 class="welcome-el">{{ conference_name }} Stats</h1>
@@ -24,7 +23,7 @@
             <div id="batting-stats-content">
                 <h2>Batting Stats</h2>
                 {% if batting_stats %}
-                <table>
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Team</th>
@@ -80,7 +79,7 @@
             <div id="pitching-stats-content" style="display: none;">
                 <h2>Pitching Stats</h2>
                 {% if pitching_stats %}
-                <table>
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Team</th>
