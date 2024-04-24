@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "4)8-8u41vx2uk^1-7rdu9-fgwg1!6c2-r1j8+@9l83f7ba6)eq"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["ncaa-bsb-stats-40f08cc936de.herokuapp.com", "localhost"]
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
 
     "api",
+    "frontend",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "whitenoise.middleware.WhiteNoiseMiddleWare",
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -122,6 +125,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # This is for global static files
+]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

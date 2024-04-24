@@ -1,67 +1,67 @@
 {% extends "base.html" %}
 
-{% block title %}Teams - College Baseball Stats{% endblock %}
+{% block title %}Teams - NCAA Baseball Stats{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="../static/css/style.css">
-<section>
-  <div>
-    <div class="welcome">
-      <h1 class="welcome-el">Teams</h1>
+<div class="tabs">
+    {% if divisions %}
+        <div class="tab-links">
+            {% for division in divisions %}
+            <button class="tab-link" onclick="openDivision(event, 'division-{{ division.id }}')" {% if forloop.first %}id="defaultOpen"{% endif %}>
+                Division {{ division.id }}
+            </button>
+            {% endfor %}
+        </div>
 
-      {% if divisions %}
-      <div class="three-buttons welcome-el" role="tablist">
         {% for division in divisions %}
-        <button class="button-link button" onclick="showDivision('{{ division.id }}')" id="tab-{{ division.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">
-          Division {{ division.id }}
-        </button>
+        <div id="division-{{ division.id }}" class="tab-content" style="{% if not forloop.first %}display: none;{% endif %}">
+            <a href="{% url 'division_stats' division_id=division.id %}" class="view-division-stats">View Stats by Division</a>
+            <div class="grid">
+                {% for conference in division.conferences|dictsort:"name" %}
+                    <div class="grid-item">
+                        <table class="conference-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">{{ conference.name }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for team in conference.teams %}
+                                <tr>
+                                    <td>{{ team.name }}</td>
+                                    <td><a href="{% url 'team_stats' team_id=team.id %}" class="view-stats">View Stats</a></td>
+                                </tr>
+                                {% endfor %}
+                                <tr class="view-all">
+                                    <td colspan="3"><a href="{% url 'conference_stats' conference_id=conference.id %}" class="view-conference-stats">View Conference Stats</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
         {% endfor %}
-      </div>
-    </div>
-
-    <div>
-      {% for division in divisions %}
-      <div id="division-{{ division.id }}" style="{% if not forloop.first %}display: none;{% endif %}">
-        <h2>Division {{ division.id }}</h2>
-        <a href="{% url 'division_stats' division_id=division.id %}">View Stats</a>
-
-        <ul>
-          {% for conference in division.conferences %}
-          <li>
-            {{ conference.name }}
-            <a href="{% url 'conference_stats' conference_id=conference.id %}">View Stats</a>
-
-            <ul>
-              {% for team in conference.teams %}
-              <li>
-                {{ team.name }}
-                <a href="{% url 'team_stats' team_id=team.id %}">View Stats</a>
-              </li>
-              {% endfor %}
-            </ul>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endfor %}
-    </div>
     {% else %}
-    <p>No conferences available.</p>
+        <p>No divisions available.</p>
     {% endif %}
-  </div>
-</section>
+</div>
 
 <script>
-  function showDivision(divisionId) {
-    // Loop through all divisions and hide them
-    {% for division in divisions %}
-    document.getElementById('division-{{ division.id }}').style.display = 'none';
-    document.getElementById('tab-{{ division.id }}').setAttribute('aria-selected', 'false');
-    {% endfor %}
+function openDivision(evt, divisionId) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tab-link");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(divisionId).style.display = "block";
+    evt.currentTarget.className += " active";
+}
 
-    // Show the selected division and set the tab to active
-    document.getElementById('division-' + divisionId).style.display = 'block';
-    document.getElementById('tab-' + divisionId).setAttribute('aria-selected', 'true');
-  }
+document.getElementById("defaultOpen").click();
 </script>
 {% endblock %}

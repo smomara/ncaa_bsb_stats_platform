@@ -47,7 +47,7 @@
                 <tbody>
                     {% for stat in batting_stats %}
                     {% if stat.qualified %}
-                    <tr>
+                    <tr class="qualified">
                         <td>{{ stat.player.name }}</td>
                         <td>{{ stat.player.grade }}</td>
                         <td>{{ stat.g }}</td>
@@ -116,7 +116,7 @@
                 <tbody>
                     {% for stat in pitching_stats %}
                     {% if stat.qualified %}
-                    <tr>
+                    <tr class="qualified">
                         <td>{{ stat.player.name }}</td>
                         <td>{{ stat.player.grade }}</td>
                         <td>{{ stat.g }}</td>
@@ -132,7 +132,7 @@
                     {% endif %}
                     {% endfor %}
                     {% for stat in pitching_stats %}
-                    {% if not stat.qualified and stat.ip > 0%}
+                    {% if not stat.qualified and stat.ip != "0.0" %}
                     <tr>
                         <td>{{ stat.player.name }}</td>
                         <td>{{ stat.player.grade }}</td>
